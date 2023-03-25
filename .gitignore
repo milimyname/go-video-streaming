@@ -1,0 +1,7 @@
+# Ignore file which starts with winter
+winter*
+
+# Ignore .dockerignore file
+.dockerignore
+
+.env
