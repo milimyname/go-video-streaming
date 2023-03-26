@@ -4,4 +4,7 @@ winter*
 # Ignore .dockerignore file
 .dockerignore
 
+# Ignore folder tmp and all files inside it
+tmp/
+
 .env
