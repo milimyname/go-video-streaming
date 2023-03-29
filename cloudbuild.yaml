@@ -1,27 +1,4 @@
 steps:
-  # Delete the previous Docker image from Google Container Registry
-  - name: "gcr.io/cloud-builders/gcloud"
-    id: "delete"
-    entrypoint: "bash"
-    args:
-      - "-c"
-      - |
-        IMAGE_NAME=gcr.io/winter-field-381117/backend-video-platform
-        OLD_IMAGE=$(gcloud container images list-tags $IMAGE_NAME --format='get(digest)' --limit=2 | tail -n 1)
-        if [ -n "$OLD_IMAGE" ]; then
-          gcloud container images delete $IMAGE_NAME@$OLD_IMAGE --force-delete-tags --quiet
-        fi
-  # Build the SvelteKit app and create a Docker image
-  - name: "gcr.io/cloud-builders/docker"
-    id: "build"
-    args:
-      - "build"
-      - "-t"
-      - "gcr.io/winter-field-381117/backend-video-platform"
-      - "--file"
-      - "Dockerfile"
-      - "."
-
   # Push the Docker image to Google Container Registry
   - name: "gcr.io/cloud-builders/docker"
     id: "push"
