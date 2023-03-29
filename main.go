@@ -22,5 +22,5 @@ func main() {
 	e.DELETE("/delete:id", handlers.DeleteHandler)
 	e.GET("/", handlers.GetAllHandler)
 
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(":3000"))
 }
