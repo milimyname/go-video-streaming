@@ -1,4 +1,15 @@
 steps:
+  # Build the SvelteKit app and create a Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    id: "build"
+    args:
+      - "build"
+      - "-t"
+      - "gcr.io/winter-field-381117/backend-video-platform"
+      - "--file"
+      - "Dockerfile"
+      - "."
+
   # Push the Docker image to Google Container Registry
   - name: "gcr.io/cloud-builders/docker"
     id: "push"
