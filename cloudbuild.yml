@@ -1,23 +1,31 @@
 steps:
-  # Build the  my-golang-app app and create a Docker image
-  - name: "docker/compose:1.29.2"
+  # Delete the previous Docker image from Google Container Registry
+  - name: "gcr.io/cloud-builders/gcloud"
+    id: "delete"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        IMAGE_NAME=gcr.io/winter-field-381117/backend-video-platform
+        OLD_IMAGE=$(gcloud container images list-tags $IMAGE_NAME --format='get(digest)' --limit=2 | tail -n 1)
+        if [ -n "$OLD_IMAGE" ]; then
+          gcloud container images delete $IMAGE_NAME@$OLD_IMAGE --force-delete-tags --quiet
+        fi
+  # Build the SvelteKit app and create a Docker image
+  - name: "gcr.io/cloud-builders/docker"
     id: "build"
     args:
-      - "-f"
-      - "docker-compose.yml"
       - "build"
-      - "--pull"
-      - "my-golang-app"
+      - "-t"
+      - "gcr.io/winter-field-381117/backend-video-platform"
+      - "--file"
+      - "Dockerfile"
+      - "."
 
-  # Tag the Docker image with the Cloud Run service URL
-  - name: "gcr.io/cloud-builders/docker"
-    id: "tag"
-    args: ["tag", "my-golang-app", "gcr.io/winter-field-381117/my-golang-app"]
-
-  # Push the Docker image to Google Contain2er Registry
+  # Push the Docker image to Google Container Registry
   - name: "gcr.io/cloud-builders/docker"
     id: "push"
-    args: ["push", "gcr.io/winter-field-381117/my-golang-app"]
+    args: ["push", "gcr.io/winter-field-381117/backend-video-platform"]
 
   # Deploy the Docker image to Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"
@@ -25,17 +33,18 @@ steps:
     args:
       - "run"
       - "deploy"
-      - "my-golang-app"
+      - "backend-video-platform"
       - "--image"
-      - "gcr.io/winter-field-381117/my-golang-app"
+      - "gcr.io/winter-field-381117/backend-video-platform"
       - "--platform"
       - "managed"
       - "--region"
-      - "europe-west3"
+      - "europe-west1"
       - "--port"
       - "3000"
       - "--memory"
       - "512M"
+    dir: "."
 
 options:
   logging: CLOUD_LOGGING_ONLY
