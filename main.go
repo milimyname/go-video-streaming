@@ -14,9 +14,9 @@ func main() {
 	e.Use(middleware.CORS())
 
 	// Get token from cookie
-	e.Use(middleware.JWTWithConfig(middleware.JWTConfig{
-		SigningKey: []byte("secret"),
-	}))
+	// e.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+	// 	SigningKey: []byte("secret"),
+	// }))
 
 	e.POST("/upload", handlers.UploadHandler)
 	e.DELETE("/delete:id", handlers.DeleteHandler)
