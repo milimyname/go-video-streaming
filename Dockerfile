@@ -1,4 +1,4 @@
-# Dockerfile for go production 
+# Dockerfile for go production
 # Path: Dockerfile
 # Compare this snippet from Dockerfile.dev:
 FROM golang:latest
@@ -18,8 +18,8 @@ COPY . .
 # Build the Go app
 RUN go build -o main .
 
-# Expose port 3000 to the outside world
-EXPOSE 3000
+# Expose port 8080 to the outside world
+EXPOSE 8080
 
 # Command to run the executable
 CMD ["./main"]
