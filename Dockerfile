@@ -18,7 +18,7 @@ COPY . .
 # Build the Go app
 RUN go build -o main .
 
-# Expose port 3000 to the outside world
+# Expose port 3000
 EXPOSE 3000
 
 # Command to run the executable
